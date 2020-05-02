@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+
+
+echo "For further instructions: https://pve.proxmox.com/wiki/Shrink_Qcow2_Disk_Files"
+echo "Prepare the linux guest"
+echo "dd if=/dev/zero of=/mytempfile"
+echo "# that could take a some time"
+echo "rm -f /mytempfile"
+
+echo
+
+USAGE="usage: $0 image.qcow2 image.qcow_backup"
+
+echo
+
+if [ -z "$1" ]; then echo "$USAGE"; exit 1; fi
+if [ -z "$2" ]; then echo "$USAGE"; exit 1; fi
+
+cp "$1" "$2"
+qemu-img convert -0 qcow2 "$2" "$1"
+
+# with compression: qemu-img convert -O qcow2 -c image.qcow2_backup image.qcow2"
+
